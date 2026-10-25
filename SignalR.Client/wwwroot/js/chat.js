@@ -15,8 +15,9 @@ const messagesList =
 //Recibir el evento
 connection.on("ReceiveMessage", (message) => {
     const item = document.createElement("li");
+    item.style.whiteSpace = "pre-line";
     item.textContent =
-        `${message.user}: ${message.message}`;
+        `${message.user}: ${message.message} \n Hora envio: ${message.sentAt}`;
     messagesList.appendChild(item);
 });
 //Conexion
