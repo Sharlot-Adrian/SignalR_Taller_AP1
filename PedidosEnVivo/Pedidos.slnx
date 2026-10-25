@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Pedidos.Client/Pedidos.Client.csproj" />
+  <Project Path="Pedidos.Hub/Pedidos.Hub.csproj" />
+  <Project Path="Pedidos.Shared/Pedidos.Shared.csproj" />
+</Solution>
