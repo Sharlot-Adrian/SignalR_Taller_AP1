@@ -20,6 +20,21 @@ connection.on("ReceiveMessage", (message) => {
         `${message.user}: ${message.message} \n Hora envio: ${message.sentAt}`;
     messagesList.appendChild(item);
 });
+//Botones de salas
+let salaActual = "General";
+const botonDesarrollo =
+    document.getElementById("btnDesarrollo");
+const botonDisenio = document.getElementById("btnDisenio");
+
+botonDesarrollo.addEventListener("click", () => {
+    salaActual = "Desarrollo";
+    connection.invoke("UnirseSala", salaActual)
+});
+
+botonDisenio.addEventListener("click", () => {
+    salaActual = "Diseño";
+    connection.invoke("UnirseSala", salaActual)
+});
 //Conexion
 connection.onreconnecting(() =>{
     status.textContent = "Reconectando...";
@@ -57,9 +72,13 @@ if(connection.state !== signalR.HubConnectionState.Connected){
     return;
 }
 
-try{
-    await connection.invoke(
-        "SendMessage", user, message);
+    try {
+        if (salaActual == "General") {
+            await connection.invoke(
+                "SendMessage", user, message);
+        } else {
+            await connection.invoke("enviarParaSala", salaActual, user, message);
+        }
     document.getElementById("messageInput").value = "";
 }catch(error){
     console.error("No se pudo enviar el mensaje: ", error);
