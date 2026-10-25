@@ -1,10 +1,31 @@
 ﻿@page
-@model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Pedidos en Vivo";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1>Pedidos en Tiempo Real</h1>
+
+<div>
+    <label for="userInput">Nombre del Cliente</label>
+    <input id="userInput" maxlength="40" />
 </div>
+
+<div>
+    <label for="estadoPedido">Seleccione el estado: </label>
+    <select id="estadoPedido" name="estado">
+        <option value="Pendiente">Pendiente</option>
+        <option value="En Preparacion">En Preparaci&oacute;n</option>
+        <option value="Enviado">Enviado</option>
+        <option value="Entregado">Entregado</option>
+    </select>
+</div>
+
+<div>
+    <label for="totalInput">Total</label>
+    <input id="totalInput" type="number" step="0.01"/>
+</div>
+
+<button id="sendButton" disabled>
+    Enviar
+</button>
+<p id="status">Conectando...</p>
