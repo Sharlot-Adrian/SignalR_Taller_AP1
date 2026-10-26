@@ -4,6 +4,8 @@ namespace Pedidos.HubServer.Hubs;
 
   public sealed class OrderNotificationHub : Microsoft.AspNetCore.SignalR.Hub
   {
+    private static readonly List<OrderNotification> listaPedidos = new List<OrderNotification>();
+    private static int idSimulado = 1;
     public async Task cambiaEstado(string nombreCliente, string estado, double total)
     {
         if (string.IsNullOrWhiteSpace(nombreCliente) || string.IsNullOrWhiteSpace(estado) || string.IsNullOrEmpty(total.ToString()))
@@ -23,10 +25,24 @@ namespace Pedidos.HubServer.Hubs;
         if(string.IsNullOrWhiteSpace(estado)){
             throw new HubException("El estado es obligatorio.");
         }
+        var notificacion = new OrderNotification(idSimulado++, nombreCliente,estado,total, DateTimeOffset.Now);
+        listaPedidos.Add(notificacion);
 
-        int orderNotificationId = Random.Shared.Next(10000,100000);
-
-        var notificacion = new OrderNotification(orderNotificationId, nombreCliente,estado,total, DateTimeOffset.Now);
         await Clients.All.SendAsync("RecibirNotificacion", notificacion);
+    }
+
+    public async Task ActualizarPedido(int orderNotificationId, string nombreCliente, string estado, double total)
+    {
+        var index = listaPedidos.FindIndex(p => p.OrderNotificationId == orderNotificationId);
+        if(index < 0)
+        {
+            throw new HubException("No se encontro el pedido.");
+        }
+
+        var pedidoDesactualizado = listaPedidos[index];
+
+        var PedidoActualizacion = new OrderNotification(orderNotificationId, nombreCliente,estado,total, pedidoDesactualizado.FechaCreacion);
+        listaPedidos[index] = PedidoActualizacion;
+        await Clients.All.SendAsync("RecibirNotificacion", PedidoActualizacion);
     }
   }

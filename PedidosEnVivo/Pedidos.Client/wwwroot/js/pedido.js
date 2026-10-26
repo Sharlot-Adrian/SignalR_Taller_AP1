@@ -5,23 +5,49 @@ const connection = new signalR.HubConnectionBuilder()
     .withAutomaticReconnect()
     .build();
 
+const idInput = document.getElementById("IdInput");
 const userInput = document.getElementById("userInput");
 const estadoPedido = document.getElementById("estadoPedido");
 const totalInput = document.getElementById("totalInput");
 const sendButton = document.getElementById("sendButton");
 const status = document.getElementById("status");
 const messagesList = document.getElementById("messagesList");
+const pedidosLocales = new Map();
 
 connection.on("RecibirNotificacion", (notificacion) =>{
-    const item = document.createElement("li");
-    item.style.whiteSpace = "pre-line";
+    pedidosLocales.set(notificacion.orderNotificationId, notificacion);
 
-    item.textContent = `Pedido: ${notificacion.OrderNotificationId} 
+    let item = document.getElementById(`pedido-ui-${notificacion.orderNotificationId}`);
+    if(!item){
+        item = document.createElement("li");
+        item.id = `pedido-ui-${notificacion.orderNotificationId}`;
+        item.style.whiteSpace = "pre-line";
+        messagesList.appendChild(item);
+    } 
+
+    item.textContent = `Pedido: ${notificacion.orderNotificationId} 
     del cliente: ${notificacion.nombreCliente} 
     - Estado: ${notificacion.estado} 
     - Total: ${notificacion.total}\n 
     Fecha Pedido: ${notificacion.fechaCreacion}`;
-    messagesList.appendChild(item);
+});
+
+idInput.addEventListener("input",() =>{
+    const idTexto = idInput.value.trim();
+    const idBuscado = idTexto ? parseInt(idTexto,10) : 0;
+
+    if(pedidosLocales.has(idBuscado)){
+        const pedido = pedidosLocales.get(idBuscado);
+        userInput.value = pedido.nombreCliente;
+        estadoPedido.value = pedido.estado;
+        totalInput.value = pedido.total;
+    }
+    else
+    {
+        userInput.value = "";
+        estadoPedido.selectedIndex = 0;
+        totalInput.value = "";
+    }
 });
 
 connection.onreconnecting(() =>{
@@ -44,6 +70,9 @@ async function startConnection(){
     }
 }
     sendButton.addEventListener("click", async () =>{
+    const idText = idInput.value.trim();
+    const orderId = idText? parseInt(idText) : 0; 
+
     const nombreCliente = document.getElementById("userInput").value.trim();
     const estado = document.getElementById("estadoPedido").value;
     const total = parseFloat(document.getElementById("totalInput").value);
@@ -59,8 +88,15 @@ async function startConnection(){
     }
 
     try{
-        await connection.invoke("cambiaEstado", nombreCliente,estado,total);
-
+        if(orderId > 0)
+        {
+            await connection.invoke("ActualizarPedido", orderId, nombreCliente, estado, total);
+        }
+        else
+        {
+            await connection.invoke("cambiaEstado", nombreCliente,estado,total);
+        }
+        document.getElementById("IdInput").value = "";
         document.getElementById("userInput").value = "";
         document.getElementById("totalInput").value = "";
         document.getElementById("estadoPedido").selectedIndex = 0;

@@ -5,8 +5,8 @@ using System.Text;
 namespace Pedidos.Shared.Contracts;
 
 public sealed record OrderNotification(int OrderNotificationId,
-    string nombreCliente,
-    string estado,
-    double total, 
-    DateTimeOffset fechaCreacion);
+    string NombreCliente,
+    string Estado,
+    double Total, 
+    DateTimeOffset FechaCreacion);
 
