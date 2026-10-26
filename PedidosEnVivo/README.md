@@ -6,21 +6,21 @@ A pesar de que existen distintas validaciones en el formulario de registro de un
 
 Para lograr utilizar la web de pedidos en vivo se deben seguir los siguientes pasos:
 
-Abrir el proyecto en Visual Studio Insiders.
+1. Abrir el proyecto en Visual Studio Insiders.
 
-Abrir dos terminales.
+2. Abrir dos terminales.
 
-En la primera terminal, se debe ejecutar el comando dotnet run --project Pedidos.Hub --urls https://localhost:7001 para que corra el Pedidos.Hub en el local host.
+3. En la primera terminal, se debe ejecutar el comando dotnet run --project Pedidos.Hub --urls https://localhost:7001 para que corra el Pedidos.Hub en el local host.
 
-En la segunda terminal, se debe ejecutar el comando dotnet run --project Pedidos.Client --urls https://localhost:7002, para que corra Pedidos.Cliente en el local host.
+4. En la segunda terminal, se debe ejecutar el comando dotnet run --project Pedidos.Client --urls https://localhost:7002, para que corra Pedidos.Cliente en el local host.
 
-Abrir Pedidos.Cliente (https://localhost:7002) en dos pestañas del navegador de su preferencia.
+5. Abrir Pedidos.Cliente (https://localhost:7002) en dos pestañas del navegador de su preferencia.
 
-Para crear un nuevo paquete, no es necesario ingresar un identificador de paquete. Esto se debe a que el sistema le asignará un id de forma automática. 
+6. Para crear un nuevo paquete, no es necesario ingresar un identificador de paquete. Esto se debe a que el sistema le asignará un id de forma automática. 
 
 Continuando con el proceso para crear un nuevo paquete, es necesario agregar los campos: Nombre del cliente, total y estado, donde estado es un combo box para limitar al usuario a los cuatro estados de la diapositiva: Pendiente, En preparación, Enviado y Entregado.
 
-El último paso para crear es darle al botón “Enviar.” Al hacer esto, se mantendrá visible la orden en la parte inferior del formulario. 
+7. El último paso para crear es darle al botón “Enviar.” Al hacer esto, se mantendrá visible la orden en la parte inferior del formulario. 
 Para editar un pedido, se debe ingresar un identificador de pedido ya registrado, al ingresar el id existente, los otros campos se rellenan para que el usuario solo deba ingresar el cambio de estado. Después de que todos los campos están llenos, es hora de darle al botón de enviar y visualizar cómo el mensaje de la lista se actualiza de forma automática. 
 
 Nota: En dado caso de agregar un Id no existente, el sistema asumirá que es un nuevo registro y le asigna un valor de id. 
